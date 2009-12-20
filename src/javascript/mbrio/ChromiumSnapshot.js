@@ -36,6 +36,12 @@ mbrio.ChromiumSnapshot = function() {
 	this.fileName_ = null;
 	this.changeLogFile_ = "changelog.xml";
 	
+	this.loadingAnimation_ = null;
+
+	this.icon_ = null;
+	
+	this.initIcon();
+	
 	this.platform = 'mac'
 	this.init();
 }
@@ -76,6 +82,11 @@ mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLog", function() {
 	return this.changeLog_;
 });
 
+mbrio.ChromiumSnapshot.prototype.initIcon = function() {	
+	this.icon_ = new mbrio.Icon();
+	this.loadingAnimation_ = new mbrio.LoadingAnimation(this);
+}
+
 mbrio.ChromiumSnapshot.prototype.reset = function() {
 	chrome.browserAction.setBadgeText({text:''});
 }
@@ -100,6 +111,8 @@ mbrio.ChromiumSnapshot.prototype.resolveVersionUrl = function(fileName) {
 }
 
 mbrio.ChromiumSnapshot.prototype.update = function() {
+	this.loadingAnimation_.start();
+	
 	var xhr = new XMLHttpRequest();
 	var cs = this;
 	
@@ -121,6 +134,7 @@ mbrio.ChromiumSnapshot.prototype.retrieveChangeLog = function() {
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4) {
 			cs.changeLog_ = xhr.responseXML;
+			cs.loadingAnimation_.registerStop();
 		}
 	}
 	

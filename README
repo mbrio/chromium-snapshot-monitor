@@ -28,7 +28,11 @@ Get The Source Code
 
 You can download the latest source code from the GitHub repository:
 
-git clone git://github.com/mbrio/chromium-snapshot-monitor.git
+   $ git clone git://github.com/mbrio/chromium-snapshot-monitor.git
+
+You can check out the GitHub project page at:
+
+http://github.com/mbrio/chromium-snapshot-monitor
 
 ================================================================================
 Requirements

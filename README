@@ -68,3 +68,12 @@ All that is needed is to get the source, enter the directory, and run ant:
    $ git clone git://github.com/mbrio/chromium-snapshot-monitor.git
    $ cd chromium-snapshot-monitor
    $ ant
+
+================================================================================
+Contact
+================================================================================
+
+If you'd like to converse with others about the Chromium Snapshot Monitor
+you can enter the Google Wave discussion at:
+
+https://wave.google.com/wave/#restored:wave:googlewave.com!w%252B03OhQfcRA

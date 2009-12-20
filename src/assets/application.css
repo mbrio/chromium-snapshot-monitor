@@ -54,3 +54,17 @@ a, a:visited, a:active, a:link, a:hover {
 a:hover {
 	text-decoration: underline;
 }
+
+div.buttons {
+	margin: 20px 0;
+}
+
+fieldset {
+	margin: 20px 0;
+	padding: 0;
+	border: 0;
+}
+
+#status {
+	color: #363;
+}

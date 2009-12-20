@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--
+   - Licensed under the Apache License, Version 2.0 (the "License");
+   - you may not use this file except in compliance with the License.
+   - You may obtain a copy of the License at
+   -
+   -     http://www.apache.org/licenses/LICENSE-2.0
+   -
+   - Unless required by applicable law or agreed to in writing, software
+   - distributed under the License is distributed on an "AS IS" BASIS,
+   - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   - See the License for the specific language governing permissions and
+   - limitations under the License.
+
+   - Copyright 2009 Michael Diolosa <michael.diolosa@gmail.com>. All Rights Reserved.
+  -->
+<html>
+	<head>
+		<meta charset="utf-8">
+
+		<style>@import url(application.css);</style>
+	</head>
+	<script type="text/javascript">
+		function save_options() {
+			var select = document.getElementById("platform");
+			var platform = select.children[select.selectedIndex].value;
+			localStorage["platform"] = platform;
+			
+			chrome.extension.sendRequest({cmd: "updatePlatform", 'platform': platform});
+			
+			var status = document.getElementById("status");
+			
+			status.innerHTML = "Options Saved.";
+			
+			setTimeout(function() {
+				status.innerHTML = "";
+			}, 2000);
+		}
+		
+		function restore_options() {
+			var platform = localStorage["platform"];
+
+			if (!platform) {
+				return;
+			}
+
+			var select = document.getElementById("platform");
+			for (var i = 0; i < select.children.length; i++) {
+				var child = select.children[i];
+				if (child.value == platform) {
+					child.selected = "true";
+					break;
+				}
+			}
+		}
+	
+	</script>
+	
+	<body onload="restore_options()">
+		<h1>Platform</h1>
+		
+		<div id="status"></div>
+		
+		<div class="form">
+			<fieldset>
+				<select id="platform">
+					<option value="arm">ARM</option>
+					<option value="linux-64">Linux 64</option>
+					<option value="linux-chromeos">Linux Chrome OS</option>
+					<option value="linux-chromiumos">Linux Chromium OS</option>
+					<option value="linux">Linux</option>
+					<option value="mac" selected>OS X</option>
+					<option value="xp">Windows</option>
+				</select>
+			</fieldset>
+		</div>
+		
+		<div class="buttons">
+			<button onclick="save_options()">Save</button>
+		</div>
+	</body>
+</html>

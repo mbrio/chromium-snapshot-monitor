@@ -30,7 +30,7 @@ mbrio.SnapshotPopup.prototype.init = function() {
 
 mbrio.SnapshotPopup.prototype.retrieveChangeLog = function() {
 	var sp = this;
-	chrome.extension.sendRequest({need: "changeLog"}, function(response) {
+	chrome.extension.sendRequest({cmd: "changeLog"}, function(response) {
 		sp.changeLog_ = response.msg;
 		sp.revision_ = response.revision;
 		sp.href_ = response.href;

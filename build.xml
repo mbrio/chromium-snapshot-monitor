@@ -1,0 +1,92 @@
+<project name="compiler" basedir="." default="js">
+	
+	<!-- UPDATE THIS SECTION FOR YOUR OWN CONFIGURATION -->
+	<property name="jsdoc.dir" value="/Users/########/Source/closure/lib/jsdoc-toolkit/jsdoc-toolkit" />
+	<property name="closure.path" value="/Users/########/Source/closure/lib/closure" />
+	<property name="soy.file" value="/Users/########/Source/closure/lib/closure-templates/build/SoyToJsSrcCompiler.jar" />
+	<property name="compiler.file" value="/Users/########/Source/closure/lib/closure-compiler/build/compiler.jar" />
+	<property name="calcdeps.file" value="/Users/########/Source/closure/lib/closure/closure/bin/calcdeps.py" />
+	<property name="python.file" value="/usr/bin/python" />
+	
+	<property name="src.dir" value="${basedir}/src/javascript" />
+	<property name="asset.dir" value="${basedir}/src/assets" />
+	<property name="templates.dir" value="${basedir}/src/templates" />
+	<property name="output.dir" value="${basedir}/build" />
+	<property name="docs.dir" value="${output.dir}/docs" />
+	
+	<property name="jsdoc.file" value="${jsdoc.dir}/jsrun.jar" />
+	<property name="jsdoc.runjs" value="${jsdoc.dir}/app/run.js" />
+	<property name="jsdoc.templates" value="${jsdoc.dir}/templates/jsdoc" />
+	<property name="output.file" value="${output.dir}/application.js" />
+
+	<target name="js.templates" description="generates the javascript templates from soy files.">
+		<apply executable="java" parallel="false" verbose="true" dest="${templates.dir}">
+			<fileset dir="${templates.dir}" includes="**/*.soy"/>
+			<arg line="-jar"/>
+			<arg path="${soy.file}"/>
+			<arg line="--shouldProvideRequireSoyNamespaces"/>
+			<arg line="--outputPathFormat"/>
+			<mapper type="glob" from="*.soy" to="*.js"/>
+			<targetfile/>
+			<srcfile/>
+		</apply>
+	</target>
+
+	<target name="js.closure.compile" description="compresses the javascript files.">
+		<mkdir dir="${output.dir}" />
+		<exec executable="${python.file}">
+			<arg value="${calcdeps.file}" />
+			<arg value="-i" />
+			<arg value="${src.dir}/" />
+			<arg value="-i" />
+			<arg value="${templates.dir}/" />
+			<arg value="-p" />
+			<arg value="${closure.path}" />
+			<arg value="-o" />
+			<arg value="compiled" />
+			<arg value="-c" />
+			<arg value="${compiler.file}" />
+			<arg value='--compiler_flags=--js_output_file=${output.file}' />
+		</exec>
+	</target>
+	
+	<target name="assets.copy" description="compresses the javascript files.">
+		<copy todir="${output.dir}">
+			<fileset dir="${asset.dir}" />
+		</copy>
+	</target>
+	
+	<target name="js" description="compile all closure related code" depends="js.templates,js.closure.compile,assets.copy,clean.js.templates" />
+
+	<target name="clean" description="cleans closure files" depends="clean.js.templates,clean.docs">
+		<delete dir="${output.dir}" />
+	</target>
+	
+	<target name="clean.docs" description="cleans closure files" depends="clean.js.templates">
+		<delete dir="${docs.dir}" />
+	</target>
+	
+	<target name="clean.js.templates" description="cleans closure files">
+		<delete>
+			<fileset dir="${templates.dir}" includes="**/*.js" />
+		</delete>
+	</target>
+	
+	<target name="docs" description="builds the documentation" depends="js.docs">
+	</target>
+	
+	<target name="js.docs" description="builds the documentation" depends="js">
+		<mkdir dir="${docs.dir}" />
+		
+		<apply executable="java" parallel="false" verbose="true">
+			<fileset dir="${src.dir}" includes="**/*.js"/>
+			<arg line="-jar"/>
+			<arg path="${jsdoc.file}"/>
+			<arg value="${jsdoc.runjs}" />
+			<arg value="-a" />
+			<arg value="-t=${jsdoc.templates}" />
+			<arg value="-d=${docs.dir}" />
+			<srcfile/>
+		</apply>
+	</target>
+</project>

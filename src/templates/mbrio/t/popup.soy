@@ -1,0 +1,44 @@
+/*
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  
+ *  Copyright 2009 Michael Diolosa <michael.diolosa@gmail.com>. All Rights Reserved.
+ */
+
+{namespace mbrio.t.Popup}
+
+/**
+ * Then changelog info for the latest version
+ * @param revision The version message data
+ * @param msg The changelog message data
+ * @param href The link to the download
+ */
+{template .changeLog}
+	<h1>Latest Chromium Snapshot Information</h1>
+	
+	<h2>Latest Revision</h2>
+	<div class="revision">
+		{$revision}
+	</div>
+	
+	<h2>ChangeLog</h2>
+	<div class="changeLog">
+		<pre>
+			{$msg}
+		</pre>
+	</div>
+	
+	<h3>Download</h3>
+	<div class="link">
+		<a href="{$href}" target="_blank">Download</a>
+	</div>
+{/template}

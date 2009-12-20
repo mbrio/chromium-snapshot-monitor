@@ -1,0 +1,70 @@
+================================================================================
+Chromium Snapshot Monitor
+================================================================================
+
+A Chromium extension that monitors the latest snapshot releases.
+
+================================================================================
+License
+================================================================================
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Copyright 2009 Michael Diolosa <michael.diolosa@gmail.com>. All Rights Reserved.
+
+================================================================================
+Get The Source Code
+================================================================================
+
+You can download the latest source code from the GitHub repository:
+
+git clone git://github.com/mbrio/chromium-snapshot-monitor.git
+
+================================================================================
+Requirements
+================================================================================
+
+The following applications and libraries are necessary to build this Chromium
+extension.
+
+The Closure Library
+http://code.google.com/closure/library/
+
+The Closure Compiler
+http://code.google.com/closure/compiler/
+
+The JavaScript Closure Templates
+http://code.google.com/closure/templates/
+
+The JsDoc Toolkit
+http://code.google.com/p/jsdoc-toolkit/
+
+Ant
+http://ant.apache.org/
+
+================================================================================
+Ant Build File Configuration
+================================================================================
+
+Be sure to set the first section of properties within build.xml to match your
+computers configuration.
+
+================================================================================
+Build
+================================================================================
+
+All that is needed is to get the source, enter the directory, and run ant:
+
+   $ git clone git://github.com/mbrio/chromium-snapshot-monitor.git
+   $ cd chromium-snapshot-monitor
+   $ ant

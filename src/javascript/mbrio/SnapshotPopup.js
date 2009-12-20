@@ -29,16 +29,15 @@ mbrio.SnapshotPopup.prototype.init = function() {
 }
 
 mbrio.SnapshotPopup.prototype.retrieveChangeLog = function() {
-	var sp = this;
-	chrome.extension.sendRequest({cmd: "changeLog"}, function(response) {
-		sp.changeLog_ = response.msg;
-		sp.revision_ = response.revision;
-		sp.href_ = response.href;
-		sp.display(response.youGot);
-	});
+	var bgpage = chrome.extension.getBackgroundPage();
+	
+	this.changeLog_ = bgpage.snapshot.changeLogMessage;
+	this.revision_ = bgpage.snapshot.changeLogRevision;
+	this.href_ = bgpage.snapshot.downloadLink;
+	this.display();
 }
 
-mbrio.SnapshotPopup.prototype.display = function(st) {
+mbrio.SnapshotPopup.prototype.display = function() {
 	var panel = goog.dom.$dom('div');
 	panel.innerHTML = mbrio.t.Popup.changeLog({href:this.href_, revision:this.revision_, msg:this.changeLog_});
 	goog.dom.appendChild(document.body, panel);

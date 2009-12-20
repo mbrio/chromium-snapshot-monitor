@@ -56,6 +56,18 @@ mbrio.ChromiumSnapshot.prototype.__defineSetter__("platform", function(val) {
 	this.fileName_ = FILE_NAMES_[val];
 });
 
+mbrio.ChromiumSnapshot.prototype.__defineGetter__("downloadLink", function() {
+	return this.resolveVersionUrl(this.fileName_);
+});
+
+mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLogMessage", function() {
+	return this.changeLog_.getElementsByTagName("msg").item(0).childNodes.item(0).nodeValue;
+});
+
+mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLogRevision", function() {
+	return this.changeLog_.getElementsByTagName("logentry").item(0).attributes.getNamedItem("revision").nodeValue;
+});
+
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("version", function() {
 	return this.version_;
 });
@@ -70,21 +82,6 @@ mbrio.ChromiumSnapshot.prototype.reset = function() {
 
 mbrio.ChromiumSnapshot.prototype.init = function() {
 	this.reset();
-
-	var cs = this;
-	
-	chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-		if (request.cmd == "changeLog") {
-			sendResponse({msg: cs.changeLog_.getElementsByTagName("msg").item(0).childNodes.item(0).nodeValue,
-						  revision: cs.changeLog_.getElementsByTagName("logentry").item(0).attributes.getNamedItem("revision").nodeValue,
-						  href: cs.resolveVersionUrl(cs.fileName_)});
-		} else if (request.cmd == "updatePlatform") {
-			cs.platform = request.platform;
-			cs.update();
-		} else {
-			sendResponse({});
-		}
-	});
 
 	this.update();
 }

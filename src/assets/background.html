@@ -22,8 +22,10 @@
 
 		<script src="application.js"></script>
 		<script>
+			var snapshot = null;
+			
 			goog.events.listen(window, 'load', function() {
-				var cs = new mbrio.ChromiumSnapshot();
+				snapshot = new mbrio.ChromiumSnapshot();
 			});
 		</script>
 	</head>

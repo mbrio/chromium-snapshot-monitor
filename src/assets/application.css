@@ -16,7 +16,7 @@
 
 body {
 	font-family: "Helvetica Neue", Arial, Verdana, Helvetica, sans-serif;
-	font-size: 12px;
+	font-size: 14px;
 	color: #333;
 }
 
@@ -31,17 +31,75 @@ a:hover {
 
 /* POPUP PAGE */
 
+html.popup-page, html.popup-page body {
+	margin: 0;padding: 0;
+}
+
+html.popup-page {
+}
+
 html.popup-page body {
 	min-width: 500px;
 	min-height: 200px;
+	margin: 10px;
 }
 
-html.popup-page h1 {
+html.popup-page div.panel {
+	background: -webkit-gradient(linear, center top, center bottom, from(#FFF), to(#d4d5cf));
+	-webkit-border-radius: 10px;
+	-webkit-box-shadow: 0px 0px 15px #746f68;
+	color: #636460;
+	position: relative;
+}
+
+html.popup-page div.panel h1 {
+	margin:0;
+	padding: 10px 20px 0px 20px;
+	border-bottom: solid 1px #d4d5cf;
+	font-size: 18px;
+	font-weight: bold;
+	height: 35px;
+}
+
+html.popup-page div.panel div.content {
+	padding: 0px 20px 15px 20px;
+}
+
+html.popup-page div.panel h2 {
 	font-size: 14px;
+	line-height: 18px;
+	margin-bottom: 5px;
+	margin-top: 15px;
 }
 
-html.popup-page h2 {
-	font-size: 12px;
+html.popup-page div.panel div.section {
+	overflow: hidden;
+}
+
+html.popup-page div.panel div.buttons {
+	border-top: solid 1px #c2c3be;
+	overflow: hidden;
+}
+
+html.popup-page div.panel div.buttons div.link {
+	float: left;
+	background: transparent url(button-spacer.png) no-repeat bottom right;
+	padding: 15px 20px;
+}
+
+html.popup-page div.panel div.buttons a {
+	color: #636460;
+}
+
+html.popup-page div.panel div.section.inline h2 {
+	float: left;	
+}
+
+html.popup-page div.panel div.section.inline div {
+	float: left;
+	margin-top: 15px;
+	margin-left: 20px;
+	line-height: 18px;
 }
 
 /* OPTIONS PAGE */

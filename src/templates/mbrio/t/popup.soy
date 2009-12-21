@@ -24,23 +24,28 @@
  * @param platform The currently configured platform
  */
 {template .changeLog}
-	<h1>Latest Chromium Snapshot Information</h1>
-	
-	{call .platformInfo}
-		{param platform: $platform /}
-	{/call}
-	
-	{call .revisionInfo}
-		{param revision: $revision /}
-	{/call}
-	
-	{call .changeLogInfo}
-		{param msg: $msg /}
-	{/call}
-	
-	{call .downloadInfo}
-		{param href: $href /}
-	{/call}
+	<div class="panel">
+		<h1>Latest Chromium Snapshot Information</h1>
+		
+		<div class="content">
+			{call .platformInfo}
+				{param platform: $platform /}
+			{/call}
+			
+			{call .revisionInfo}
+				{param revision: $revision /}
+			{/call}
+			
+			{call .changeLogInfo}
+				{param msg: $msg /}
+			{/call}
+		</div>
+		<div class="buttons">
+			{call .downloadInfo}
+				{param href: $href /}
+			{/call}
+		</div>
+	</div>
 {/template}
 
 /**
@@ -48,9 +53,11 @@
  * @param platform The currently configured platform
  */
 {template .platformInfo}
-	<h2>Platform</h2>
-	<div class="platform">
-		{$platform}
+	<div class="section inline">
+		<h2>Platform</h2>
+		<div class="platform">
+			{$platform}
+		</div>
 	</div>
 {/template}
 
@@ -59,9 +66,11 @@
  * @param revision The version message data
  */
 {template .revisionInfo}
-	<h2>Latest Revision</h2>
-	<div class="revision">
-		{$revision}
+	<div class="section inline">
+		<h2>Latest Revision</h2>
+		<div class="revision">
+			{$revision}
+		</div>
 	</div>
 {/template}
 
@@ -70,9 +79,11 @@
  * @param msg The changelog message data
  */
 {template .changeLogInfo}
-	<h2>ChangeLog</h2>
-	<div class="changeLog">
-		{$msg|noAutoescape}
+	<div class="section">
+		<h2>Change Log</h2>
+		<div class="changeLog">
+			{$msg|noAutoescape}
+		</div>
 	</div>
 {/template}
 
@@ -81,7 +92,6 @@
  * @param href The link to the download
  */
 {template .downloadInfo}
-	<h2>Download</h2>
 	<div class="link">
 		<a href="{$href}" target="_blank">Download</a>
 	</div>

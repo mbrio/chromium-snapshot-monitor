@@ -42,24 +42,11 @@ mbrio.ChromiumSnapshot = function() {
 	
 	this.initIcon();
 	
-	this.platform = 'mac'
 	this.init();
 }
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("platform", function() {
-	var platform = 'mac';
-	var lsp = localStorage["platform"];
-	if (lsp) platform = lsp;
-	
-	return platform;
-});
-
-mbrio.ChromiumSnapshot.prototype.__defineSetter__("platform", function(val) {
-	localStorage["platform"] = val;
-	
-	this.baseUrl_ = "http://build.chromium.org/buildbot/snapshots/chromium-rel-" + val;
-	this.latestUrl_ = this.baseUrl_ + "/LATEST";
-	this.fileName_ = FILE_NAMES_[val];
+	return localStorage.platform || 'mac';
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("downloadLink", function() {
@@ -112,6 +99,10 @@ mbrio.ChromiumSnapshot.prototype.resolveVersionUrl = function(fileName) {
 
 mbrio.ChromiumSnapshot.prototype.update = function() {
 	this.loadingAnimation_.start();
+	
+	this.baseUrl_ = "http://build.chromium.org/buildbot/snapshots/chromium-rel-" + this.platform;
+	this.latestUrl_ = this.baseUrl_ + "/LATEST";
+	this.fileName_ = FILE_NAMES_[this.platform];
 	
 	var xhr = new XMLHttpRequest();
 	var cs = this;

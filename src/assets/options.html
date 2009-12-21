@@ -24,11 +24,9 @@
 		function save_options() {
 			var select = document.getElementById("platform");
 			var platform = select.children[select.selectedIndex].value;
-			localStorage["platform"] = platform;
+			localStorage.platform = platform;
 			
-			var bgpage = chrome.extension.getBackgroundPage();
-			bgpage.snapshot.platform = platform;
-			bgpage.snapshot.update();
+			chrome.extension.getBackgroundPage().snapshot.update();
 			
 			var status = document.getElementById("status");
 			
@@ -42,11 +40,8 @@
 		}
 		
 		function restore_options() {
-			var platform = localStorage["platform"];
-
-			if (!platform) {
-				return;
-			}
+			var platform = localStorage.platform;
+			if (!platform) return;
 
 			var select = document.getElementById("platform");
 			for (var i = 0; i < select.children.length; i++) {

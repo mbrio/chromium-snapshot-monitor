@@ -104,31 +104,33 @@ mbrio.ChromiumSnapshot.prototype.update = function() {
 	this.latestUrl_ = this.baseUrl_ + "/LATEST";
 	this.fileName_ = FILE_NAMES_[this.platform];
 	
-	var xhr = new XMLHttpRequest();
 	var cs = this;
-	
-	xhr.onreadystatechange = function() {
+	this.request(this.latestUrl_, function(xhr) {
 		if (xhr.readyState == 4) {
 			cs.checkVersion(parseInt(xhr.responseText));
 			cs.retrieveChangeLog();
 		}
-	}
-	
-	xhr.open("GET", this.latestUrl_, true);
-	xhr.send();
+	});
 }
 
 mbrio.ChromiumSnapshot.prototype.retrieveChangeLog = function() {
-	var xhr = new XMLHttpRequest();
 	var cs = this;
-	
-	xhr.onreadystatechange = function() {
+	this.request(this.resolveVersionUrl(this.changeLogFile_), function(xhr) {
 		if (xhr.readyState == 4) {
 			cs.changeLog_ = xhr.responseXML;
 			cs.loadingAnimation_.registerStop();
 		}
+	});
+}
+
+mbrio.ChromiumSnapshot.prototype.request = function(url, onreadystatechange) {
+	var xhr = new XMLHttpRequest();
+	var cs = this;
+	
+	xhr.onreadystatechange = function() {
+		if (onreadystatechange != null) onreadystatechange(xhr);
 	}
 	
-	xhr.open("GET", this.resolveVersionUrl(this.changeLogFile_), true);
+	xhr.open("GET", url, true);
 	xhr.send();
 }

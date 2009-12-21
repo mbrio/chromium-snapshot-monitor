@@ -29,14 +29,14 @@
 			chrome.extension.getBackgroundPage().snapshot.update();
 			
 			var status = document.getElementById("status");
+			var statusContent = document.getElementById("status-content");
 			
-			status.innerHTML = "Options Saved.";
-			status.style.display = "block";
-			
-			setTimeout(function() {
-				status.innerHTML = "";
-				status.style.display = "none";
-			}, 2000);
+			status.style.webkitAnimationName = "";
+			statusContent.innerHTML = "Options Saved.";
+			setTimeout(function(){
+				status.style.webkitAnimationName = "op-status-display";
+				status.style.webkitAnimationDuration = "3000ms";
+			}, 0);
 		}
 		
 		function restore_options() {
@@ -61,7 +61,7 @@
 			<h1>Options</h1>
 			<div class="form">
 				<label>Select the platform you would like to monitor:</label>
-				<div id="status"></div>
+				<div id="status"><div id="status-content">Some Test Content</div></div>
 				<fieldset>
 					<select id="platform">
 						<option value="arm">ARM</option>

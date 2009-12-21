@@ -67,6 +67,7 @@ html.options-page div.panel {
 	margin: 20px auto 10px auto;
 	-webkit-animation-name: op-panel-fade;
 	-webkit-animation-duration: 500ms;
+	position: relative;
 }
 
 @-webkit-keyframes op-logo-fade {
@@ -116,23 +117,18 @@ html.options-page #platform {
 }
 
 html.options-page #status {
+	position: absolute;
+	top: 13px;
+	right: 20px;
 	color: #363;
-	height: 0px;
-	overflow: hidden;
 	opacity: 0;
 }
 
-html.options-page #status-content {
-	padding: 15px 0 0 0;
-	height: 30px;
-}
-
 @-webkit-keyframes op-status-display {
-  0%   { height: 0; opacity: 0; }
-  10%  { height: 30px; opacity: 0; }
-  50%  { height: 30px; opacity: 1; }
-  90%  { height: 30px; opacity: 0; }
-  100% { height: 0; opacity: 0; }
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  75%  { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 html.options-page ul, html.options-page li {

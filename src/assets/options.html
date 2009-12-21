@@ -14,7 +14,7 @@
 
    - Copyright 2009 Michael Diolosa <michael.diolosa@gmail.com>. All Rights Reserved.
   -->
-<html>
+<html class="options-page">
 	<head>
 		<meta charset="utf-8">
 
@@ -34,9 +34,11 @@
 			var status = document.getElementById("status");
 			
 			status.innerHTML = "Options Saved.";
+			status.style.display = "block";
 			
 			setTimeout(function() {
 				status.innerHTML = "";
+				status.style.display = "none";
 			}, 2000);
 		}
 		
@@ -60,26 +62,36 @@
 	</script>
 	
 	<body onload="restore_options()">
-		<h1>Platform</h1>
-		
-		<div id="status"></div>
-		
-		<div class="form">
-			<fieldset>
-				<select id="platform">
-					<option value="arm">ARM</option>
-					<option value="linux-64">Linux 64</option>
-					<option value="linux-chromeos">Linux Chrome OS</option>
-					<option value="linux-chromiumos">Linux Chromium OS</option>
-					<option value="linux">Linux</option>
-					<option value="mac" selected>OS X</option>
-					<option value="xp">Windows</option>
-				</select>
-			</fieldset>
+	<body>
+		<div class="panel">
+			<h1>Options</h1>
+			<div class="form">
+				<label>Select the platform you would like to monitor:</label>
+				<div id="status"></div>
+				<fieldset>
+					<select id="platform">
+						<option value="arm">ARM</option>
+						<option value="linux-64">Linux 64</option>
+						<option value="linux-chromeos">Linux Chrome OS</option>
+						<option value="linux-chromiumos">Linux Chromium OS</option>
+						<option value="linux">Linux</option>
+						<option value="mac" selected>OS X</option>
+						<option value="xp">Windows</option>
+					</select>
+				</fieldset>
+				<div class="buttons">
+					<a href="#" onclick="save_options()">Save</a>
+				</div>
+			</div>
+			<div class="info">
+				<p>The following links pertain to the Chromium Snapshot Monitor extension:</p>
+				<ul>
+					<li><a href="https://chrome.google.com/extensions/detail/kkmhmcomapkibhfnjbjfaeemdkjeoamh" target="_blank">Chromium Extension</a></li>
+					<li><a href="http://wiki.github.com/mbrio/chromium-snapshot-monitor" target="_blank">GitHub Project</a></li>
+					<li><a href="https://wave.google.com/wave/#restored:wave:googlewave.com!w%252B03OhQfcRA" target="_blank">Google Wave</a></li>
+				</ul>
+			</div>
 		</div>
-		
-		<div class="buttons">
-			<button onclick="save_options()">Save</button>
-		</div>
+		<div id="logo"><img src="logo.png"></div>
 	</body>
 </html>

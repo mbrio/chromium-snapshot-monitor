@@ -70,18 +70,18 @@ html.options-page div.panel {
 	position: relative;
 }
 
-@-webkit-keyframes op-logo-fade {
+@-webkit-keyframes op-footer-fade {
   0%   { opacity: 0; }
   50%  { opacity:0; }
-  100% { opacity: 0.35; }
+  100% { opacity: 1; }
 }
 
-html.options-page #logo {
+html.options-page #footer {
 	width: 440px;
 	padding: 0 0 0 20px;
-	margin: 10px auto;
-	opacity: 0.35;
-	-webkit-animation-name: op-logo-fade;
+	margin: 20px auto;
+	opacity: 1;
+	-webkit-animation-name: op-footer-fade;
 	-webkit-animation-duration: 750ms;
 }
 
@@ -142,4 +142,10 @@ html.options-page div.panel div.info {
 
 html.options-page div.panel div.info li {
 	line-height: 24px
+}
+
+html.options-page #footer {
+	font-size: 11px;
+	color: #d6d7d1;
+	line-height: 16px
 }

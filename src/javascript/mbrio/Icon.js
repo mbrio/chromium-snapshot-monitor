@@ -39,11 +39,11 @@ mbrio.Icon.prototype.draw = function() {
 	this.canvasContext_.save();
 	
 	this.canvasContext_.clearRect(0, 0, 19, 19);
-	this.canvasContext_.translate(Math.ceil(19 / 2), Math.ceil(18 / 2));
+	this.canvasContext_.translate(Math.ceil(18 / 2), Math.ceil(18 / 2));
 	this.canvasContext_.rotate(this.rotation_ * Math.PI / 180);
-	this.canvasContext_.drawImage(this.iconImage_, -Math.ceil(19 / 2), -Math.ceil(18 / 2));
+	this.canvasContext_.drawImage(this.iconImage_, -Math.ceil(18 / 2), -Math.ceil(18 / 2));
 	
 	this.canvasContext_.restore();
 	
-	chrome.browserAction.setIcon({imageData:this.canvasContext_.getImageData(0, 0, 19, 18)});
+	chrome.browserAction.setIcon({imageData:this.canvasContext_.getImageData(0, 0, 19, 19)});
 }

@@ -21,7 +21,7 @@
 		<style>@import url(application.css);</style>
 	</head>
 	<script type="text/javascript">
-		function save_options() {
+		function saveOptions() {
 			var select = document.getElementById("platform");
 			var platform = select.children[select.selectedIndex].value;
 			localStorage.platform = platform;
@@ -39,7 +39,7 @@
 			}, 0);
 		}
 		
-		function restore_options() {
+		function restoreOptions() {
 			var platform = localStorage.platform;
 			if (!platform) return;
 
@@ -52,10 +52,20 @@
 				}
 			}
 		}
+		
+		function recordDownload(revision) {
+			if (revision != null) {
+				revision = revision.trim();
+
+				if (revision.length > 0) {
+					localStorage.latestDownloadedRevision = revision;
+				}
+			}
+		}
 	
 	</script>
 	
-	<body onload="restore_options()">
+	<body onload="restoreOptions()">
 	<body>
 		<div class="panel">
 			<h1>Options</h1>
@@ -74,7 +84,7 @@
 					</select>
 				</fieldset>
 				<div class="buttons">
-					<a href="#" onclick="save_options()">Save</a>
+					<a href="#" onclick="saveOptions()">Save</a>
 				</div>
 			</div>
 			<div class="info">

@@ -43,6 +43,7 @@
 		<div class="buttons">
 			{call .downloadInfo}
 				{param href: $href /}
+				{param revision: $revision /}
 			{/call}
 		</div>
 	</div>
@@ -90,9 +91,10 @@
 /**
  * The currently selected platform's download information
  * @param href The link to the download
+ * @param revision The version message data
  */
 {template .downloadInfo}
 	<div class="link">
-		<a href="{$href}" target="_blank">Download</a>
+		<a href="{$href}" onclick="recordDownload('{$revision}')" target="_blank">Download</a>
 	</div>
 {/template}

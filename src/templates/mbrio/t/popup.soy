@@ -17,13 +17,19 @@
 {namespace mbrio.t.Popup}
 
 /**
- * Then changelog info for the latest version
+ * The changelog info for the latest version
  * @param revision The version message data
  * @param msg The changelog message data
  * @param href The link to the download
+ * @param platform The currently configured platform
  */
 {template .changeLog}
 	<h1>Latest Chromium Snapshot Information</h1>
+	
+	<h2>Platform</h2>
+	<div class="platform">
+		{$platform}
+	</div>
 	
 	<h2>Latest Revision</h2>
 	<div class="revision">
@@ -32,12 +38,10 @@
 	
 	<h2>ChangeLog</h2>
 	<div class="changeLog">
-		<pre>
-			{$msg}
-		</pre>
+		{$msg|noAutoescape}
 	</div>
 	
-	<h3>Download</h3>
+	<h2>Download</h2>
 	<div class="link">
 		<a href="{$href}" target="_blank">Download</a>
 	</div>

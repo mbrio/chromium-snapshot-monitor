@@ -15,29 +15,9 @@
  */
 
 body {
-	min-width: 500px;
-	min-height: 250px;
 	font-family: "Helvetica Neue", Arial, Verdana, Helvetica, sans-serif;
 	font-size: 12px;
 	color: #333;
-}
-
-div.changeLog pre {
-	font-family: "Helvetica Neue", Arial, Verdana, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #333;
-}
-
-h1 {
-	font-size: 13px;
-}
-
-h2 {
-	font-size: 12px;
-}
-
-h3 {
-	font-size: 12px;
 }
 
 a, a:visited, a:active, a:link, a:hover {
@@ -49,18 +29,50 @@ a:hover {
 	text-decoration: underline;
 }
 
+/* POPUP PAGE */
+
+html.popup-page body {
+	min-width: 500px;
+	min-height: 200px;
+}
+
+html.popup-page h1 {
+	font-size: 13px;
+}
+
+html.popup-page h2 {
+	font-size: 12px;
+}
+
+/* OPTIONS PAGE */
+
 html.options-page, html.options-page body {
 	margin:0;padding:0;
 	background: #b3ab9f;
+	font-size: 14px;
+}
+
+@-webkit-keyframes op-panel-fade {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 html.options-page div.panel {
-	background: -webkit-gradient(linear, center top, center bottom, color-stop(0.0, #FFF), color-stop(1.0, #d4d5cf));
+	background: -webkit-gradient(linear, center top, center bottom, from(#FFF), to(#d4d5cf));
 	-webkit-border-radius: 10px;
 	-webkit-box-shadow: 0px 0px 15px #746f68;
+	opacity: 1;
 	color: #636460;
 	width: 460px;
-	margin: 20px auto;
+	margin: 20px auto 10px auto;
+	-webkit-animation-name: op-panel-fade;
+	-webkit-animation-duration: 500ms;
+}
+
+@-webkit-keyframes op-logo-fade {
+  0%   { opacity: 0; }
+  50%  { opacity:0; }
+  100% { opacity: 0.35; }
 }
 
 html.options-page #logo {
@@ -68,6 +80,8 @@ html.options-page #logo {
 	padding: 0 0 0 20px;
 	margin: 10px auto;
 	opacity: 0.35;
+	-webkit-animation-name: op-logo-fade;
+	-webkit-animation-duration: 750ms;
 }
 
 html.options-page div.panel h1 {
@@ -85,15 +99,10 @@ html.options-page div.panel div.form {
 
 html.options-page div.panel div.form label {
 	color: #636460;
-	font-size: 14px;
 }
 
 html.options-page div.panel div.form div.buttons {
 	margin: 20px 0 0 0;
-}
-
-html.options-page div.panel div.form div.buttons a {
-	font-size: 14px;
 }
 
 html.options-page div.panel div.form fieldset {
@@ -102,25 +111,23 @@ html.options-page div.panel div.form fieldset {
 	border: 0;
 }
 
-#platform {
+html.options-page #platform {
 	width:  100%;
 }
 
-#status {
+html.options-page #status {
 	display: none;
 	color: #363;
 	margin: 20px 0;
-	font-size: 14px;
 }
 
-ul, li {
+html.options-page ul, html.options-page li {
 	margin:0;padding:0;list-style:none;
 }
 
 html.options-page div.panel div.info {
 	border-top: solid 1px #d4d5cf;
 	padding: 0 20px 15px 20px;
-	font-size: 14px;
 }
 
 html.options-page div.panel div.info li {

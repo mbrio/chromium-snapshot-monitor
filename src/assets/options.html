@@ -26,7 +26,6 @@
 			var platform = select.children[select.selectedIndex].value;
 			localStorage["platform"] = platform;
 			
-			// chrome.extension.sendRequest({cmd: "updatePlatform", 'platform': platform});
 			var bgpage = chrome.extension.getBackgroundPage();
 			bgpage.snapshot.platform = platform;
 			bgpage.snapshot.update();

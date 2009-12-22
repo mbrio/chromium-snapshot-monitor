@@ -57,3 +57,8 @@ mbrio.SnapshotPopup.prototype.recordDownload = function(revision) {
 		}
 	}
 }
+
+mbrio.SnapshotPopup.prototype.refresh = function() {
+	window.close();
+	chrome.extension.getBackgroundPage().snapshot.update();
+}

@@ -34,10 +34,11 @@ mbrio.LoadingAnimation.prototype.start = function() {
 	this.prev_ = new Date().getTime();
 
 	this.interval_ = setInterval(function() {
+		var rotationsPerSecond = 2;
 		var current = new Date().getTime();
 		var elapsed = (current - la.prev_) / 1000;
 		
-		var nextRotation = la.parent_.icon_.rotation + (360 * elapsed);
+		var nextRotation = la.parent_.icon_.rotation + ((rotationsPerSecond * 360) * elapsed);
 		var currentRotation = Math.ceil(nextRotation / 360);
 		
 		if (la.stoppingRotation_ != null && currentRotation > la.stoppingRotation_) {

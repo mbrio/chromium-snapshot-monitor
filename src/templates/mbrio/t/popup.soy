@@ -45,12 +45,10 @@
 				{param msg: $msg /}
 			{/call}
 		</div>
-		<div class="buttons">
-			{call .downloadInfo}
-				{param href: $href /}
-				{param revision: $revision /}
-			{/call}
-		</div>
+		{call .buttons}
+			{param href: $href /}
+			{param revision: $revision /}
+		{/call}
 	</div>
 {/template}
 
@@ -98,9 +96,14 @@
  * @param href The link to the download
  * @param revision The version message data
  */
-{template .downloadInfo}
-	<div class="link">
-		<a href="{$href}" onclick="snapshotPopup.recordDownload('{$revision}')" target="_blank">Download</a>
+{template .buttons}
+	<div class="buttons">
+		<div class="link">
+			<a href="{$href}" onclick="snapshotPopup.recordDownload('{$revision}')" target="_blank">Download</a>
+		</div>
+		<div class="link">
+			<a href="javascript:void(0)" onclick="snapshotPopup.refresh()" target="_blank">Refresh</a>
+		</div>
 	</div>
 {/template}
 

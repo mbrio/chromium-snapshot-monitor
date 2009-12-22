@@ -1,6 +1,6 @@
 {
 	"name": "Chromium Snapshot Monitor",
-	"version": "1.7",
+	"version": "1.7.1",
 	"description": "Monitors the latest snapshot releases",
 	"background_page": "background.html",
 	"options_page": "options.html",

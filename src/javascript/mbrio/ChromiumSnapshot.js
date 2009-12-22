@@ -14,8 +14,6 @@
 
 goog.provide('mbrio.ChromiumSnapshot');
 
-goog.require('goog.dom');
-
 var FILE_NAMES_ = [];
 FILE_NAMES_["arm"] = "chrome-linux.zip";
 FILE_NAMES_["linux-64"] = "chrome-linux.zip";
@@ -46,7 +44,7 @@ mbrio.ChromiumSnapshot = function() {
 }
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("platform", function() {
-	return localStorage.platform || 'mac';
+	return mbrio.Settings.platform;
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("downloadLink", function() {

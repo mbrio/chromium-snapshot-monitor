@@ -14,8 +14,6 @@
 
 goog.provide('mbrio.LoadingAnimation');
 
-goog.require('goog.dom');
-
 mbrio.LoadingAnimation = function(parent) {
 	this.interval_ = null;
 	this.fullRotation_ = 360;

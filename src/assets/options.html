@@ -24,7 +24,7 @@
 		function saveOptions() {
 			var select = document.getElementById("platform");
 			var platform = select.children[select.selectedIndex].value;
-			localStorage.platform = platform;
+			mbrio.Settings.platform = platform;
 			
 			chrome.extension.getBackgroundPage().snapshot.update();
 			
@@ -40,7 +40,7 @@
 		}
 		
 		function restoreOptions() {
-			var platform = localStorage.platform;
+			var platform = mbrio.Settings.platform;
 			if (!platform) return;
 
 			var select = document.getElementById("platform");
@@ -58,7 +58,7 @@
 				revision = revision.trim();
 
 				if (revision.length > 0) {
-					localStorage.latestDownloadedRevision = revision;
+					mbrio.Settings.latestDownloadedRevision = revision;
 				}
 			}
 		}

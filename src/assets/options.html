@@ -27,6 +27,10 @@
 			var platform = select.children[select.selectedIndex].value;
 			mbrio.Settings.platform = platform;
 			
+			select = document.getElementById("repository");
+			var repository = select.children[select.selectedIndex].value;
+			mbrio.Settings.snapshotRepository = repository;
+			
 			chrome.extension.getBackgroundPage().snapshot.update();
 			
 			var status = document.getElementById("status");
@@ -41,13 +45,17 @@
 		}
 		
 		function restoreOptions() {
-			var platform = mbrio.Settings.platform;
-			if (!platform) return;
+			selectOption("platform", mbrio.Settings.platform);
+			selectOption("repository", mbrio.Settings.snapshotRepository);
+		}
+		
+		function selectOption(selectId, val) {
+			if (!val) return;
 
-			var select = document.getElementById("platform");
+			var select = document.getElementById(selectId);
 			for (var i = 0; i < select.children.length; i++) {
 				var child = select.children[i];
-				if (child.value == platform) {
+				if (child.value == val) {
 					child.selected = "true";
 					break;
 				}
@@ -82,6 +90,13 @@
 						<option value="linux">Linux</option>
 						<option value="mac" selected>OS X</option>
 						<option value="xp">Windows</option>
+					</select>
+				</fieldset>
+				<label>Select the repository you would like to monitor:</label>
+				<fieldset>
+					<select id="repository">
+						<option value="continuous" selected>Continuous (Passed Tests)</option>
+						<option value="snapshot">All Snapshots (May Not Have Passed All Tests)</option>
 					</select>
 				</fieldset>
 				<div class="buttons">

@@ -14,25 +14,11 @@
 
 goog.provide('mbrio.ChromiumSnapshot');
 
-var FILE_NAMES_ = [];
-FILE_NAMES_["arm"] = "chrome-linux.zip";
-FILE_NAMES_["linux-64"] = "chrome-linux.zip";
-FILE_NAMES_["linux-chromeos"] = "chrome-linux.zip";
-FILE_NAMES_["linux-chromiumos"] = "chrome-linux.zip";
-FILE_NAMES_["linux"] = "chrome-linux.zip";
-FILE_NAMES_["mac"] = "chrome-mac.zip";
-FILE_NAMES_["xp"] = "chrome-win32.zip";
-
 var BADGE_COLOR_ = {color: [255, 202, 28, 255]};
 
 mbrio.ChromiumSnapshot = function() {
 	this.version_ = null;
 	this.changeLog_ = null;
-	
-	this.baseUrl_ = null;
-	this.latestUrl_ = null;
-	this.fileName_ = null;
-	this.changeLogFile_ = "changelog.xml";
 	
 	this.loadingAnimation_ = null;
 
@@ -48,7 +34,7 @@ mbrio.ChromiumSnapshot.prototype.__defineGetter__("platform", function() {
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("downloadLink", function() {
-	return this.resolveVersionUrl(this.fileName_);
+	return mbrio.Settings.currentRepository.getDownloadUrl(this.platform, this.version_);
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLogMessage", function() {
@@ -91,19 +77,11 @@ mbrio.ChromiumSnapshot.prototype.checkVersion = function(version) {
 	}
 }
 
-mbrio.ChromiumSnapshot.prototype.resolveVersionUrl = function(fileName) {
-	return this.baseUrl_ + "/" + this.version_.toString() + "/" + fileName;
-}
-
 mbrio.ChromiumSnapshot.prototype.update = function() {
 	this.loadingAnimation_.start();
 	
-	this.baseUrl_ = "http://build.chromium.org/buildbot/snapshots/chromium-rel-" + this.platform;
-	this.latestUrl_ = this.baseUrl_ + "/LATEST";
-	this.fileName_ = FILE_NAMES_[this.platform];
-	
 	var cs = this;
-	this.request(this.latestUrl_, function(xhr) {
+	this.request(mbrio.Settings.currentRepository.getLatestUrl(this.platform), function(xhr) {
 		if (xhr.readyState == 4) {
 			cs.checkVersion(parseInt(xhr.responseText));
 			cs.retrieveChangeLog();
@@ -113,7 +91,7 @@ mbrio.ChromiumSnapshot.prototype.update = function() {
 
 mbrio.ChromiumSnapshot.prototype.retrieveChangeLog = function() {
 	var cs = this;
-	this.request(this.resolveVersionUrl(this.changeLogFile_), function(xhr) {
+	this.request(mbrio.Settings.currentRepository.getChangeLogUrl(this.platform, this.version_), function(xhr) {
 		if (xhr.readyState == 4) {
 			cs.changeLog_ = xhr.responseXML;
 			cs.loadingAnimation_.registerStop();

@@ -170,7 +170,7 @@ html.options-page div.panel div.form fieldset {
 	border: 0;
 }
 
-html.options-page #platform {
+html.options-page #platform, html.options-page #repository {
 	width:  100%;
 }
 

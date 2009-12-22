@@ -13,30 +13,60 @@
 // Copyright 2009 Michael Diolosa <michael.diolosa@gmail.com>. All Rights Reserved.
 
 goog.provide('mbrio.ChromiumSnapshot');
+goog.provide('mbrio.ChromiumSnapshotStatus');
+
+goog.require('goog.events');
+goog.require('goog.events.EventTarget');
 
 var BADGE_COLOR_ = {color: [255, 202, 28, 255]};
 
+mbrio.ChromiumSnapshotStatus.none = "none";
+mbrio.ChromiumSnapshotStatus.loading = "loading";
+mbrio.ChromiumSnapshotStatus.loaded = "loaded";
+mbrio.ChromiumSnapshotStatus.error = "error";
+
 mbrio.ChromiumSnapshot = function() {
-	this.version_ = null;
-	this.changeLog_ = null;
+	goog.events.EventTarget.call(this);
+	
+	this.revisionModel_ = new mbrio.RevisionModel();
 	this.loadingAnimation_ = null;
 	this.icon_ = null;
+	
+	this.currentRequest_ = null;
+	
+	this.status = mbrio.ChromiumSnapshotStatus.none;
 	
 	this.initIcon();
 	
 	this.init();
 }
+goog.inherits(mbrio.ChromiumSnapshot, goog.events.EventTarget);
+
+mbrio.ChromiumSnapshot.STATUS_UPDATED = 'statusupdated';
+
+mbrio.ChromiumSnapshot.prototype.__defineGetter__("status", function() {
+	return this.status_;
+});
+
+mbrio.ChromiumSnapshot.prototype.__defineSetter__("status", function(val) {
+	this.status_ = val;
+    this.dispatchEvent(mbrio.ChromiumSnapshot.STATUS_UPDATED);
+});
+
+mbrio.ChromiumSnapshot.prototype.__defineGetter__("icon", function() {
+	return this.icon_;
+});
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("platform", function() {
 	return mbrio.Settings.platform;
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("downloadLink", function() {
-	return mbrio.Settings.currentRepository.getDownloadUrl(this.platform, this.version_);
+	return mbrio.Settings.currentRepository.getDownloadUrl(this.platform, this.revisionModel_.version);
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLogMessage", function() {
-	var messages = this.changeLog_.getElementsByTagName("msg");
+	var messages = this.revisionModel_.changeLog.getElementsByTagName("msg");
 	var message = "";
 	
 	if (messages && messages.length > 0) {
@@ -51,7 +81,7 @@ mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLogMessage", function()
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLogRevision", function() {
-	var logEntries = this.changeLog_.getElementsByTagName("logentry");
+	var logEntries = this.revisionModel_.changeLog.getElementsByTagName("logentry");
 	var revision = "-1";
 	
 	if (logEntries && logEntries.length > 0) {
@@ -64,11 +94,11 @@ mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLogRevision", function(
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("version", function() {
-	return this.version_;
+	return this.revisionModel_.version;
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLog", function() {
-	return this.changeLog_;
+	return this.revisionModel_.changeLog;
 });
 
 mbrio.ChromiumSnapshot.prototype.initIcon = function() {	
@@ -88,11 +118,11 @@ mbrio.ChromiumSnapshot.prototype.init = function() {
 
 mbrio.ChromiumSnapshot.prototype.checkVersion = function(version) {
 	if (!isNaN(version)) {
-		this.version_ = version;
+		this.revisionModel_.version = version;
 		
-		if (this.version_ > mbrio.Settings.latestDownloadedRevision) {
+		if (this.revisionModel_.version > mbrio.Settings.latestDownloadedRevision) {
 			chrome.browserAction.setBadgeBackgroundColor(BADGE_COLOR_);
-			chrome.browserAction.setBadgeText({text:this.version_.toString()});
+			chrome.browserAction.setBadgeText({text:this.revisionModel_.version.toString()});
 		} else {
 			chrome.browserAction.setBadgeText({text:''});
 		}
@@ -100,35 +130,59 @@ mbrio.ChromiumSnapshot.prototype.checkVersion = function(version) {
 }
 
 mbrio.ChromiumSnapshot.prototype.update = function() {
+	this.status = mbrio.ChromiumSnapshotStatus.loading;
+	this.icon_.displayError = false;
 	this.loadingAnimation_.start();
 	
 	var cs = this;
 	this.request(mbrio.Settings.currentRepository.getLatestUrl(this.platform), function(xhr) {
 		if (xhr.readyState == 4) {
-			cs.checkVersion(parseInt(xhr.responseText));
-			cs.retrieveChangeLog();
+			if (xhr.status != 200)  {
+				cs.icon_.displayError = true;
+				cs.loadingAnimation_.registerStop();
+				cs.status = mbrio.ChromiumSnapshotStatus.error;
+			} else {
+				cs.checkVersion(parseInt(xhr.responseText));
+				cs.retrieveChangeLog();
+			}
 		}
 	});
 }
 
 mbrio.ChromiumSnapshot.prototype.retrieveChangeLog = function() {
 	var cs = this;
-	this.request(mbrio.Settings.currentRepository.getChangeLogUrl(this.platform, this.version_), function(xhr) {
+	this.request(mbrio.Settings.currentRepository.getChangeLogUrl(this.platform, this.revisionModel_.version), function(xhr) {
 		if (xhr.readyState == 4) {
-			cs.changeLog_ = xhr.responseXML;
+			if (xhr.status != 200)  {
+				cs.icon_.displayError = true;
+				cs.status = mbrio.ChromiumSnapshotStatus.error;
+			} else {
+				cs.revisionModel_.changeLog = xhr.responseXML;
+				cs.status = mbrio.ChromiumSnapshotStatus.loaded;
+			}	
+
 			cs.loadingAnimation_.registerStop();
 		}
 	});
 }
 
+mbrio.ChromiumSnapshot.prototype.abort = function() {
+	if (this.currentRequest_ != null) {
+		this.currentRequest_.abort();
+		this.currentRequest_ = null;
+	}
+}
+
 mbrio.ChromiumSnapshot.prototype.request = function(url, onreadystatechange) {
-	var xhr = new XMLHttpRequest();
+	this.abort();
+	
+	this.currentRequest_ = new XMLHttpRequest();
 	var cs = this;
 	
-	xhr.onreadystatechange = function() {
-		if (onreadystatechange != null) onreadystatechange(xhr);
+	this.currentRequest_.onreadystatechange = function() {
+		if (onreadystatechange != null) onreadystatechange(cs.currentRequest_);
 	}
 	
-	xhr.open("GET", url, true);
-	xhr.send();
+	this.currentRequest_.open("GET", url, true);
+	this.currentRequest_.send();
 }

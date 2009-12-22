@@ -40,7 +40,6 @@ html.popup-page {
 
 html.popup-page body {
 	min-width: 500px;
-	min-height: 200px;
 	margin: 10px;
 }
 
@@ -63,6 +62,13 @@ html.popup-page div.panel h1 {
 
 html.popup-page div.panel div.content {
 	padding: 0px 20px 15px 20px;
+}
+
+html.popup-page div.panel p.msg {
+	font-size: 14px;
+	line-height: 18px;
+	margin-bottom: 45px;
+	margin-top: 15px;
 }
 
 html.popup-page div.panel h2 {

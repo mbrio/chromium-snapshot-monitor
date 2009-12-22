@@ -17,14 +17,59 @@
 {namespace mbrio.t.Popup}
 
 /**
- * The changelog info for the latest version
+ * The snapshot manager is currently loading.
+ */
+{template .loading}
+	<div class="panel">
+		<h1>Loading...</h1>
+		<div class="content">
+			<p class="msg">Attempting to contact the servers.</p>
+		</div>
+		<div class="buttons">
+			{call .refreshButton /}
+		</div>
+	</div>
+{/template}
+
+/**
+ * An error has occured within the snapshot manager.
+ */
+{template .error}
+	<div class="panel">
+		<h1>Error</h1>
+		<div class="content">
+			<p class="message">An error has occured.</p>
+		</div>
+		<div class="buttons">
+			{call .refreshButton /}
+		</div>
+	</div>
+{/template}
+
+/**
+ * Nothing has happened to the snapshot manager.
+ */
+{template .none}
+	<div class="panel">
+		<h1>Needs Initialization</h1>
+		<div class="content">
+			<p class="msg">Please hit the refresh button.</p>
+		</div>
+		<div class="buttons">
+			{call .refreshButton /}
+		</div>
+	</div>
+{/template}
+
+/**
+ * The loading info for the latest version
  * @param revision The version message data
  * @param msg The changelog message data
  * @param href The link to the download
  * @param platform The currently configured platform
  * @param prevRevision The previously downloaded revision
  */
-{template .changeLog}
+{template .loaded}
 	<div class="panel">
 		<h1>Latest Chromium Snapshot Information</h1>
 		
@@ -45,10 +90,13 @@
 				{param msg: $msg /}
 			{/call}
 		</div>
-		{call .buttons}
-			{param href: $href /}
-			{param revision: $revision /}
-		{/call}
+		<div class="buttons">
+			{call .downloadButton}
+				{param href: $href /}
+				{param revision: $revision /}
+			{/call}
+			{call .refreshButton /}
+		</div>
 	</div>
 {/template}
 
@@ -96,14 +144,18 @@
  * @param href The link to the download
  * @param revision The version message data
  */
-{template .buttons}
-	<div class="buttons">
-		<div class="link">
-			<a href="{$href}" onclick="snapshotPopup.recordDownload('{$revision}')" target="_blank">Download</a>
-		</div>
-		<div class="link">
-			<a href="javascript:void(0)" onclick="snapshotPopup.refresh()" target="_blank">Refresh</a>
-		</div>
+{template .downloadButton}
+	<div class="link">
+		<a href="{$href}" onclick="snapshotPopup.recordDownload('{$revision}')" target="_blank">Download</a>
+	</div>
+{/template}
+
+/**
+ * Refreshes the retrieved data.
+ */
+{template .refreshButton}
+	<div class="link">
+		<a href="javascript:void(0)" onclick="snapshotPopup.refresh()" target="_blank">Refresh</a>
 	</div>
 {/template}
 

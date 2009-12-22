@@ -17,9 +17,12 @@ goog.provide('mbrio.Icon');
 goog.require('goog.dom');
 
 mbrio.Icon = function() {
-	this.iconImage_ = goog.dom.$("icon");
+	this.iconNormalImage_ = goog.dom.$("icon");
+	this.iconErrorImage_ = goog.dom.$("icon-error");
+	this.iconImage_ = this.iconNormalImage_;
 	this.canvas_ = goog.dom.$("canvas");
 	this.canvasContext_ = this.canvas_.getContext('2d');
+	this.displayError_ = false;
 	
 	this.rotation = 0;
 }
@@ -30,6 +33,22 @@ mbrio.Icon.prototype.__defineGetter__("rotation", function() {
 
 mbrio.Icon.prototype.__defineSetter__("rotation", function(val) {
 	this.rotation_ = val;
+	this.draw();
+});
+
+mbrio.Icon.prototype.__defineGetter__("displayError", function() {
+	return this.displayError_;
+});
+
+mbrio.Icon.prototype.__defineSetter__("displayError", function(val) {
+	this.displayError_ = val;
+	
+	if (this.displayError_) {
+		this.iconImage_ = this.iconErrorImage_;
+	} else {
+		this.iconImage_ = this.iconNormalImage_;
+	}
+	
 	this.draw();
 });
 

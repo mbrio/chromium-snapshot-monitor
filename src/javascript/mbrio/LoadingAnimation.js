@@ -38,14 +38,14 @@ mbrio.LoadingAnimation.prototype.start = function() {
 		var current = new Date().getTime();
 		var elapsed = (current - la.prev_) / 1000;
 		
-		var nextRotation = la.parent_.icon_.rotation + ((rotationsPerSecond * 360) * elapsed);
+		var nextRotation = la.parent_.icon.rotation + ((rotationsPerSecond * 360) * elapsed);
 		var currentRotation = Math.ceil(nextRotation / 360);
 		
 		if (la.stoppingRotation_ != null && currentRotation > la.stoppingRotation_) {
-			la.parent_.icon_.rotation = 0;
+			la.parent_.icon.rotation = 0;
 			la.stop();
 		} else {		
-			la.parent_.icon_.rotation = nextRotation;
+			la.parent_.icon.rotation = nextRotation;
 			
 			la.currentRotation_ = currentRotation;
 			la.prev_ = current;

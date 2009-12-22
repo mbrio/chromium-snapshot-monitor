@@ -17,33 +17,60 @@ goog.provide('mbrio.SnapshotPopup');
 goog.require('goog.dom');
 
 mbrio.SnapshotPopup = function() {
-	this.changeLog_ = null;
-	this.revision_ = null;
-	this.href_ = null;
-	this.platform_ = null;
+	this.skipLoading = false;
 	
 	this.init();
 }
 
 mbrio.SnapshotPopup.prototype.init = function() {
+	var sp = this;
+	var snapshot = chrome.extension.getBackgroundPage().snapshot;
+	var statusUpdatedHandler = function() {
+		if (sp.skipLoading && snapshot.status == mbrio.ChromiumSnapshotStatus.loading) {
+			sp.skipLoading = false;	
+		} else {
+			sp.display();
+		}
+	}
+	snapshot.addEventListener(mbrio.ChromiumSnapshot.STATUS_UPDATED, statusUpdatedHandler);
+	
+	goog.events.listen(window, 'unload', function() {
+		snapshot.removeEventListener(mbrio.ChromiumSnapshot.STATUS_UPDATED, statusUpdatedHandler)
+	});
+	
 	this.retrieveChangeLog();
 }
 
 mbrio.SnapshotPopup.prototype.retrieveChangeLog = function() {
-	var bgpage = chrome.extension.getBackgroundPage();
-	
-	this.changeLog_ = bgpage.snapshot.changeLogMessage;
-	if (this.changeLog_ != null && this.changeLog_.length > 0) this.changeLog_ = this.changeLog_.replace(/\n\n/g, "<br /><br />");
-	
-	this.revision_ = bgpage.snapshot.changeLogRevision;
-	this.href_ = bgpage.snapshot.downloadLink;
-	this.platform_ = bgpage.snapshot.platform;
 	this.display();
 }
 
 mbrio.SnapshotPopup.prototype.display = function() {
+	goog.dom.removeChildren(document.body);
+	
 	var panel = goog.dom.$dom('div');
-	panel.innerHTML = mbrio.t.Popup.changeLog({href:this.href_, revision:this.revision_, msg:this.changeLog_, platform:this.platform_, prevRevision:mbrio.Settings.latestDownloadedRevision});
+	
+	var status = chrome.extension.getBackgroundPage().snapshot.status;
+	
+	if (status == mbrio.ChromiumSnapshotStatus.loaded) {
+		var bgpage = chrome.extension.getBackgroundPage();
+
+		var changeLog = bgpage.snapshot.changeLogMessage;
+		if (changeLog != null && changeLog.length > 0) changeLog = changeLog.replace(/\n\n/g, "<br /><br />");
+
+		var revision = bgpage.snapshot.changeLogRevision;
+		var href = bgpage.snapshot.downloadLink;
+		var platform = bgpage.snapshot.platform;
+		
+		panel.innerHTML = mbrio.t.Popup.loaded({href:href, revision:revision, msg:changeLog, platform:platform, prevRevision:mbrio.Settings.latestDownloadedRevision});
+	}
+	else if (status == mbrio.ChromiumSnapshotStatus.loading)
+		panel.innerHTML = mbrio.t.Popup.loading();
+	else if (status == mbrio.ChromiumSnapshotStatus.error)
+		panel.innerHTML = mbrio.t.Popup.error();
+	else if (status == mbrio.ChromiumSnapshotStatus.none)
+		panel.innerHTML = mbrio.t.Popup.none();
+
 	goog.dom.appendChild(document.body, panel);
 }
 
@@ -59,6 +86,6 @@ mbrio.SnapshotPopup.prototype.recordDownload = function(revision) {
 }
 
 mbrio.SnapshotPopup.prototype.refresh = function() {
-	window.close();
+	this.skipLoading = true;
 	chrome.extension.getBackgroundPage().snapshot.update();
 }

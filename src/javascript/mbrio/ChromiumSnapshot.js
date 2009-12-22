@@ -19,9 +19,7 @@ var BADGE_COLOR_ = {color: [255, 202, 28, 255]};
 mbrio.ChromiumSnapshot = function() {
 	this.version_ = null;
 	this.changeLog_ = null;
-	
 	this.loadingAnimation_ = null;
-
 	this.icon_ = null;
 	
 	this.initIcon();
@@ -38,11 +36,31 @@ mbrio.ChromiumSnapshot.prototype.__defineGetter__("downloadLink", function() {
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLogMessage", function() {
-	return this.changeLog_.getElementsByTagName("msg").item(0).childNodes.item(0).nodeValue;
+	var messages = this.changeLog_.getElementsByTagName("msg");
+	var message = "";
+	
+	if (messages && messages.length > 0) {
+		var messageNode = messages.item(messages.length - 1);
+		
+		if (messageNode && messageNode.firstChild) {
+			message = messageNode.firstChild.nodeValue;
+		}
+	}
+	
+	return message;
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLogRevision", function() {
-	return this.changeLog_.getElementsByTagName("logentry").item(0).attributes.getNamedItem("revision").nodeValue;
+	var logEntries = this.changeLog_.getElementsByTagName("logentry");
+	var revision = "-1";
+	
+	if (logEntries && logEntries.length > 0) {
+		var logEntry = logEntries.item(logEntries.length - 1);
+		var revisionNode = logEntry.attributes.getNamedItem("revision");
+		if (revisionNode) revision = revisionNode.nodeValue;
+	}
+	
+	return revision;
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("version", function() {
@@ -72,8 +90,12 @@ mbrio.ChromiumSnapshot.prototype.checkVersion = function(version) {
 	if (!isNaN(version)) {
 		this.version_ = version;
 		
-		chrome.browserAction.setBadgeBackgroundColor(BADGE_COLOR_);
-		chrome.browserAction.setBadgeText({text:this.version_.toString()});
+		if (this.version_ > mbrio.Settings.latestDownloadedRevision) {
+			chrome.browserAction.setBadgeBackgroundColor(BADGE_COLOR_);
+			chrome.browserAction.setBadgeText({text:this.version_.toString()});
+		} else {
+			chrome.browserAction.setBadgeText({text:''});
+		}
 	}
 }
 

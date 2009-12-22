@@ -43,6 +43,17 @@ mbrio.SnapshotPopup.prototype.retrieveChangeLog = function() {
 
 mbrio.SnapshotPopup.prototype.display = function() {
 	var panel = goog.dom.$dom('div');
-	panel.innerHTML = mbrio.t.Popup.changeLog({href:this.href_, revision:this.revision_, msg:this.changeLog_, platform:this.platform_});
+	panel.innerHTML = mbrio.t.Popup.changeLog({href:this.href_, revision:this.revision_, msg:this.changeLog_, platform:this.platform_, prevRevision:mbrio.Settings.latestDownloadedRevision});
 	goog.dom.appendChild(document.body, panel);
+}
+
+mbrio.SnapshotPopup.prototype.recordDownload = function(revision) {
+	if (revision != null) {
+		revision = revision.trim();
+
+		if (revision.length > 0) {
+			mbrio.Settings.latestDownloadedRevision = revision;
+			chrome.extension.getBackgroundPage().snapshot.update();
+		}
+	}
 }

@@ -84,7 +84,7 @@ mbrio.SettingsManager.prototype.__defineSetter__("platform", function(val) {
 });
 
 mbrio.SettingsManager.prototype.__defineGetter__("latestDownloadedRevision", function() {
-	return localStorage.latestDownloadedRevision || null;
+	return localStorage.latestDownloadedRevision || -1;
 });
 
 mbrio.SettingsManager.prototype.__defineSetter__("latestDownloadedRevision", function(val) {

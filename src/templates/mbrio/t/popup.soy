@@ -22,6 +22,7 @@
  * @param msg The changelog message data
  * @param href The link to the download
  * @param platform The currently configured platform
+ * @param prevRevision The previously downloaded revision
  */
 {template .changeLog}
 	<div class="panel">
@@ -30,6 +31,10 @@
 		<div class="content">
 			{call .platformInfo}
 				{param platform: $platform /}
+			{/call}
+
+			{call .prevRevision}
+				{param prevRevision: $prevRevision /}
 			{/call}
 			
 			{call .revisionInfo}
@@ -95,6 +100,21 @@
  */
 {template .downloadInfo}
 	<div class="link">
-		<a href="{$href}" onclick="recordDownload('{$revision}')" target="_blank">Download</a>
+		<a href="{$href}" onclick="snapshotPopup.recordDownload('{$revision}')" target="_blank">Download</a>
 	</div>
+{/template}
+
+/**
+ * The currently selected platform's revision information
+ * @param prevRevision The previously downloaded revision
+ */
+{template .prevRevision}
+	{if $prevRevision != null and length($prevRevision) > 0}
+	<div class="section inline">
+		<h2>Previously Downloaded Revision</h2>
+		<div class="revision">
+			{$prevRevision}
+		</div>
+	</div>
+	{/if}
 {/template}

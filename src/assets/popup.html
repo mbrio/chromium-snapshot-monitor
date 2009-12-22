@@ -22,8 +22,9 @@
 
 		<script src="application.js"></script>
 		<script>
+			var snapshotPopup = null;
 			goog.events.listen(window, 'load', function() {
-				var cs = new mbrio.SnapshotPopup();
+				snapshotPopup = new mbrio.SnapshotPopup();
 			});
 		</script>
 	</head>

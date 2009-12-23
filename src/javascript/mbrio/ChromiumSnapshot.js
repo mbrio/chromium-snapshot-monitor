@@ -32,6 +32,13 @@ mbrio.ChromiumSnapshot = function() {
 	this.loadingAnimation_ = null;
 	this.icon_ = null;
 	
+	this.updateInterval_ = null;
+
+	var cs = this;
+	goog.events.listen(window, "unload", function() {
+		cs.stopUpdateInterval();
+	});
+	
 	this.currentRequest_ = null;
 	
 	this.status = mbrio.ChromiumSnapshotStatus.none;
@@ -114,7 +121,7 @@ mbrio.ChromiumSnapshot.prototype.checkVersion = function(version) {
 		
 		if (this.revisionModel_.version > mbrio.Settings.latestDownloadedRevision) {
 			chrome.browserAction.setBadgeBackgroundColor(BADGE_COLOR_);
-			chrome.browserAction.setBadgeText({text:this.revisionModel_.version.toString()});
+			chrome.browserAction.setBadgeText({text:'new'});
 			this.icon_.displayUpToDate = false;
 		} else {
 			chrome.browserAction.setBadgeText({text:''});
@@ -123,12 +130,28 @@ mbrio.ChromiumSnapshot.prototype.checkVersion = function(version) {
 	}
 }
 
+mbrio.ChromiumSnapshot.prototype.startUpdateInterval = function() {
+	var cs = this;
+	
+	this.stopUpdateInterval();
+	if (mbrio.Settings.canCheckContinuously) this.updateInterval_ = setTimeout(function(){cs.update();}, parseInt(mbrio.Settings.checkInterval) * 60000);
+}
+
+mbrio.ChromiumSnapshot.prototype.stopUpdateInterval = function() {
+	if (this.updateInterval_ != null) {
+		clearTimeout(this.updateInterval_);
+		this.updateInterval_ = null;
+	}
+}
+
 mbrio.ChromiumSnapshot.prototype.update = function() {
+	var cs = this;
+	this.startUpdateInterval();
+	
 	this.status = mbrio.ChromiumSnapshotStatus.loading;
 	this.icon_.displayError = false;
 	this.loadingAnimation_.start();
 	
-	var cs = this;
 	this.request(mbrio.Settings.currentRepository.getLatestUrl(this.platform), function(xhr) {
 		if (xhr.readyState == 4) {
 			if (xhr.status != 200)  {

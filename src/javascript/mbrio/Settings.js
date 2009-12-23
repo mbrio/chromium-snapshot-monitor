@@ -131,4 +131,24 @@ mbrio.SettingsManager.prototype.__defineSetter__("snapshotRepository", function(
 	localStorage.snapshotRepository = val;
 });
 
+mbrio.SettingsManager.prototype.__defineGetter__("checkContinuously", function() {
+	return localStorage.checkContinuously || "false";
+});
+
+mbrio.SettingsManager.prototype.__defineSetter__("checkContinuously", function(val) {
+	localStorage.checkContinuously = val;
+});
+
+mbrio.SettingsManager.prototype.__defineGetter__("checkInterval", function() {
+	return localStorage.checkInterval || '60';
+});
+
+mbrio.SettingsManager.prototype.__defineSetter__("checkInterval", function(val) {
+	localStorage.checkInterval = val;
+});
+
+mbrio.SettingsManager.prototype.__defineGetter__("canCheckContinuously", function() {
+	return (this.checkContinuously == "true" && parseInt(this.checkInterval) > 0);
+});
+
 mbrio.Settings = new mbrio.SettingsManager();

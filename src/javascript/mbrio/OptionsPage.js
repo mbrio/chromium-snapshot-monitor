@@ -46,28 +46,57 @@ mbrio.OptionsPage.prototype.platformUpdated = function() {
 	}
 }
 
-mbrio.OptionsPage.prototype.saveOptions = function() {
-	var select = goog.dom.$("platform");
-	var platform = select.children[select.selectedIndex].value;
-	mbrio.Settings.platform = platform;
+mbrio.OptionsPage.prototype.__defineGetter__("isValid", function() {
+	var validateNumbers = goog.dom.$$('.validate-as-number');
 	
-	select = goog.dom.$("repository");
-	var repository = select.children[select.selectedIndex].value;
-	mbrio.Settings.snapshotRepository = repository;
+	for (var i = 0; i < validateNumbers.length; i++) {
+		var node = validateNumbers.item(i);
+		if (typeof(node.value) == 'undefined' || node.value == null || node.value.length < 1) {
+			node.value = '0';
+		}
+		
+		var regexp = new RegExp(/[0-9]+/);
+		var matches = regexp.exec(node.value);
+		
+		if (matches == null) {
+			node.style.backgroundColor = "#ffa5a5";
+			alert("The value specified is invalid (It must be a number).");
+			return false;
+		} else {
+			node.style.backgroundColor = "#FFF";
+		}
+	}
 	
-	mbrio.Settings.useInstaller = goog.dom.$('installer-enabled').checked;
-	
-	chrome.extension.getBackgroundPage().snapshot.update();
-	
-	var status = goog.dom.$("status");
-	
-	status.innerHTML = "Options Saved.";
+	return true;
+});
 
-	status.style.webkitAnimationName = "";
-	setTimeout(function(){
-		status.style.webkitAnimationName = "op-status-display";
-		status.style.webkitAnimationDuration = "2s";
-	}, 0);
+mbrio.OptionsPage.prototype.saveOptions = function() {
+	if (this.isValid) {
+		var select = goog.dom.$("platform");
+		var platform = select.children[select.selectedIndex].value;
+		mbrio.Settings.platform = platform;
+	
+		select = goog.dom.$("repository");
+		var repository = select.children[select.selectedIndex].value;
+		mbrio.Settings.snapshotRepository = repository;
+	
+		mbrio.Settings.useInstaller = goog.dom.$('installer-enabled').checked;
+		
+		mbrio.Settings.checkContinuously = goog.dom.$('check-continuously').checked;
+		mbrio.Settings.checkInterval = parseInt(goog.dom.$('check-interval').value);
+	
+		chrome.extension.getBackgroundPage().snapshot.update();
+	
+		var status = goog.dom.$("status");
+	
+		status.innerHTML = "Options Saved.";
+
+		status.style.webkitAnimationName = "";
+		setTimeout(function(){
+			status.style.webkitAnimationName = "op-status-display";
+			status.style.webkitAnimationDuration = "2s";
+		}, 0);
+	}
 }
 
 mbrio.OptionsPage.prototype.restoreOptions = function() {
@@ -79,6 +108,9 @@ mbrio.OptionsPage.prototype.restoreOptions = function() {
 	} else {
 		goog.dom.$('installer-disabled').checked = true;
 	}
+	
+	goog.dom.$('check-continuously').checked = (mbrio.Settings.checkContinuously == 'true');
+	goog.dom.$('check-interval').value = mbrio.Settings.checkInterval;
 	
 	this.platformUpdated();
 }

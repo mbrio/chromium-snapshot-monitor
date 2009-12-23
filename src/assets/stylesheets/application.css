@@ -89,7 +89,7 @@ html.popup-page div.panel div.buttons {
 
 html.popup-page div.panel div.buttons div.link {
 	float: left;
-	background: transparent url(button-spacer.png) no-repeat bottom right;
+	background: transparent url(../images/button-spacer.png) no-repeat bottom right;
 	padding: 15px 20px;
 }
 
@@ -216,4 +216,8 @@ html.options-page #footer {
 	font-size: 11px;
 	color: #d6d7d1;
 	line-height: 16px
+}
+
+input.error {
+	color: red;
 }

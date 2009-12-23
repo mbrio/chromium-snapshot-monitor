@@ -38,6 +38,13 @@
 					</select>
 				</fieldset>
 			</div>
+			<div id="installer-panel">
+				<label>Would you like to download the installer or zip:</label>
+				<fieldset>
+					<div><input id="installer-enabled" name="installer" type="radio"> <label for="installer-enabled">Installer</label></div>
+					<div><input id="installer-disabled" name="installer" type="radio"> <label for="installer-disabled">Zip</label></div>
+				</fieldset>
+			</div>
 			<div id="repository-panel">
 				<label>Select the repository you would like to monitor:</label>
 				<fieldset>
@@ -47,11 +54,10 @@
 					</select>
 				</fieldset>
 			</div>
-			<div id="installer-panel">
-				<label>Would you like to download the installer or zip:</label>
+			<div id="check-continuously-panel">
+				<label>Would you like to check for updates at regular intervals:</label>
 				<fieldset>
-					<div><input id="installer-enabled" name="installer" type="radio"><label for="installer-enabled">Installer</label></div>
-					<div><input id="installer-disabled" name="installer" type="radio"><label for="installer-disabled">Zip</label></div>
+					<div><input id="check-continuously" type="checkbox"> <label for="check-continuously">Check Every</label> <input id="check-interval" class="validate-as-number" type="text" size="4" /> Minutes</div>
 				</fieldset>
 			</div>
 			<div class="buttons">
@@ -68,7 +74,7 @@
 		</div>
 	</div>
 	<div id="footer">
-		<div><img src="logo.png"></div>
+		<div><img src="images/logo.png"></div>
 		<div id="copyright">Copyright 2009 Michael Diolosa &lt;michael.diolosa@gmail.com&gt;. All Rights Reserved.</div>
 	</div>
 {/template}

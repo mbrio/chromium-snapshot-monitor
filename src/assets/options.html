@@ -18,93 +18,16 @@
 	<head>
 		<meta charset="utf-8">
 
-		<script src="application.js"></script>
 		<style>@import url(application.css);</style>
+		
+		<script src="application.js"></script>
+		<script type="text/javascript">
+			var optionsPage = null;
+			goog.events.listen(window, 'load', function() {
+				optionsPage = new mbrio.OptionsPage();
+			});
+		</script>
 	</head>
-	<script type="text/javascript">
-		function saveOptions() {
-			var select = document.getElementById("platform");
-			var platform = select.children[select.selectedIndex].value;
-			mbrio.Settings.platform = platform;
-			
-			select = document.getElementById("repository");
-			var repository = select.children[select.selectedIndex].value;
-			mbrio.Settings.snapshotRepository = repository;
-			
-			chrome.extension.getBackgroundPage().snapshot.update();
-			
-			var status = document.getElementById("status");
-			
-			status.innerHTML = "Options Saved.";
-
-			status.style.webkitAnimationName = "";
-			setTimeout(function(){
-				status.style.webkitAnimationName = "op-status-display";
-				status.style.webkitAnimationDuration = "2s";
-			}, 0);
-		}
-		
-		function restoreOptions() {
-			selectOption("platform", mbrio.Settings.platform);
-			selectOption("repository", mbrio.Settings.snapshotRepository);
-		}
-		
-		function selectOption(selectId, val) {
-			if (!val) return;
-
-			var select = document.getElementById(selectId);
-			for (var i = 0; i < select.children.length; i++) {
-				var child = select.children[i];
-				if (child.value == val) {
-					child.selected = "true";
-					break;
-				}
-			}
-		}
-	
-	</script>
-	
-	<body onload="restoreOptions()">
 	<body>
-		<div class="panel">
-			<h1>Options</h1>
-			<div class="form">
-				<label>Select the platform you would like to monitor:</label>
-				<div id="status"></div>
-				<fieldset>
-					<select id="platform">
-						<option value="arm">ARM</option>
-						<option value="linux-64">Linux 64</option>
-						<option value="linux-chromeos">Linux Chrome OS</option>
-						<option value="linux-chromiumos">Linux Chromium OS</option>
-						<option value="linux">Linux</option>
-						<option value="mac" selected>OS X</option>
-						<option value="xp">Windows</option>
-					</select>
-				</fieldset>
-				<label>Select the repository you would like to monitor:</label>
-				<fieldset>
-					<select id="repository">
-						<option value="continuous" selected>Continuous (Passed Tests)</option>
-						<option value="snapshot">All Snapshots (May Not Have Passed All Tests)</option>
-					</select>
-				</fieldset>
-				<div class="buttons">
-					<a href="#" onclick="saveOptions()">Save</a>
-				</div>
-			</div>
-			<div class="info">
-				<p>The following links pertain to the Chromium Snapshot Monitor extension:</p>
-				<ul>
-					<li><a href="https://chrome.google.com/extensions/detail/kkmhmcomapkibhfnjbjfaeemdkjeoamh" target="_blank">Chromium Extension</a></li>
-					<li><a href="http://wiki.github.com/mbrio/chromium-snapshot-monitor" target="_blank">GitHub Project</a></li>
-					<li><a href="https://wave.google.com/wave/#restored:wave:googlewave.com!w%252B03OhQfcRA" target="_blank">Google Wave</a></li>
-				</ul>
-			</div>
-		</div>
-		<div id="footer">
-			<div><img src="logo.png"></div>
-			<div id="copyright">Copyright 2009 Michael Diolosa &lt;michael.diolosa@gmail.com&gt;. All Rights Reserved.</div>
-		</div>
 	</body>
 </html>

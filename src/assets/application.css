@@ -117,8 +117,12 @@ html.options-page, html.options-page body {
 }
 
 @-webkit-keyframes op-panel-fade {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
+	0%   { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+html.options-page #installer-panel {
+	display: none;
 }
 
 html.options-page div.panel {

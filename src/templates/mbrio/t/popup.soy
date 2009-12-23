@@ -164,7 +164,7 @@
  * @param prevRevision The previously downloaded revision
  */
 {template .prevRevision}
-	{if $prevRevision != null and length($prevRevision) > 0}
+	{if $prevRevision != null and length($prevRevision) > 0 and $prevRevision != -1}
 	<div class="section inline">
 		<h2>Previously Downloaded Revision</h2>
 		<div class="revision">

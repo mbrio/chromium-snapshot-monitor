@@ -24,6 +24,7 @@ FILE_NAMES_["linux-chromiumos"] = "chrome-linux.zip";
 FILE_NAMES_["linux"] = "chrome-linux.zip";
 FILE_NAMES_["mac"] = "chrome-mac.zip";
 FILE_NAMES_["xp"] = "chrome-win32.zip";
+FILE_NAMES_["xp-installer"] = "mini_installer.exe";
 
 mbrio.Repositories.continuous = {
 	name:"continuous", 
@@ -44,7 +45,14 @@ mbrio.Repositories.continuous = {
 		else if (platform == "linux-64") platform = "linux";
 		else if (platform == "linux-chromeos") platform = "linux";
 		else if (platform == "linux-chromiumos") platform = "linux";
-		return this.downloadBaseUrl + platform + "/" + version.toString() + "/" + FILE_NAMES_[platform];
+		
+		var fileName = FILE_NAMES_[platform];
+		
+		if (platform == "xp" && mbrio.Settings.useInstaller == "true") {
+			fileName = FILE_NAMES_["xp-installer"];
+		}
+		
+		return this.downloadBaseUrl + platform + "/" + version.toString() + "/" + fileName;
 	},
 
 	getChangeLogUrl: function(platform, version) {
@@ -75,12 +83,24 @@ mbrio.Repositories.snapshot = {
 
 mbrio.SettingsManager = function() {}
 
+mbrio.SettingsManager.prototype.__defineGetter__("useInstaller", function() {
+	var useInstaller = true;
+	if (localStorage.useInstaller != null) useInstaller = localStorage.useInstaller;
+
+	return useInstaller;
+});
+
+mbrio.SettingsManager.prototype.__defineSetter__("useInstaller", function(val) {
+	localStorage.useInstaller = val;
+});
+
 mbrio.SettingsManager.prototype.__defineGetter__("platform", function() {
 	return localStorage.platform || 'mac';
 });
 
 mbrio.SettingsManager.prototype.__defineSetter__("platform", function(val) {
 	localStorage.platform = val;
+	this.latestDownloadedRevision = -1;
 });
 
 mbrio.SettingsManager.prototype.__defineGetter__("latestDownloadedRevision", function() {

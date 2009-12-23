@@ -1,0 +1,74 @@
+/*
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  
+ *  Copyright 2009 Michael Diolosa <michael.diolosa@gmail.com>. All Rights Reserved.
+ */
+
+{namespace mbrio.t.Options}
+
+/**
+ * The options page template
+ */
+{template .page}
+	<div class="panel">
+		<h1>Options</h1>
+		<div class="form">
+			<div id="platform-panel">
+				<label>Select the platform you would like to monitor:</label>
+				<div id="status"></div>
+				<fieldset>
+					<select id="platform" onchange="optionsPage.platformUpdated()">
+						<option value="arm">ARM</option>
+						<option value="linux-64">Linux 64</option>
+						<option value="linux-chromeos">Linux Chrome OS</option>
+						<option value="linux-chromiumos">Linux Chromium OS</option>
+						<option value="linux">Linux</option>
+						<option value="mac" selected>OS X</option>
+						<option value="xp">Windows</option>
+					</select>
+				</fieldset>
+			</div>
+			<div id="repository-panel">
+				<label>Select the repository you would like to monitor:</label>
+				<fieldset>
+					<select id="repository">
+						<option value="continuous" selected>Continuous (Passed Tests)</option>
+						<option value="snapshot">All Snapshots (May Not Have Passed All Tests)</option>
+					</select>
+				</fieldset>
+			</div>
+			<div id="installer-panel">
+				<label>Would you like to download the installer or zip:</label>
+				<fieldset>
+					<div><input id="installer-enabled" name="installer" type="radio"><label for="installer-enabled">Installer</label></div>
+					<div><input id="installer-disabled" name="installer" type="radio"><label for="installer-disabled">Zip</label></div>
+				</fieldset>
+			</div>
+			<div class="buttons">
+				<a href="#" onclick="optionsPage.saveOptions()">Save</a>
+			</div>
+		</div>
+		<div class="info">
+			<p>The following links pertain to the Chromium Snapshot Monitor extension:</p>
+			<ul>
+				<li><a href="https://chrome.google.com/extensions/detail/kkmhmcomapkibhfnjbjfaeemdkjeoamh" target="_blank">Chromium Extension</a></li>
+				<li><a href="http://wiki.github.com/mbrio/chromium-snapshot-monitor" target="_blank">GitHub Project</a></li>
+				<li><a href="https://wave.google.com/wave/#restored:wave:googlewave.com!w%252B03OhQfcRA" target="_blank">Google Wave</a></li>
+			</ul>
+		</div>
+	</div>
+	<div id="footer">
+		<div><img src="logo.png"></div>
+		<div id="copyright">Copyright 2009 Michael Diolosa &lt;michael.diolosa@gmail.com&gt;. All Rights Reserved.</div>
+	</div>
+{/template}

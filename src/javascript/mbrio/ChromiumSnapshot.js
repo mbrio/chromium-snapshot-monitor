@@ -108,6 +108,7 @@ mbrio.ChromiumSnapshot.prototype.initIcon = function() {
 
 mbrio.ChromiumSnapshot.prototype.reset = function() {
 	chrome.browserAction.setBadgeText({text:''});
+	this.icon_.displayUpToDate = true;
 }
 
 mbrio.ChromiumSnapshot.prototype.init = function() {
@@ -123,8 +124,10 @@ mbrio.ChromiumSnapshot.prototype.checkVersion = function(version) {
 		if (this.revisionModel_.version > mbrio.Settings.latestDownloadedRevision) {
 			chrome.browserAction.setBadgeBackgroundColor(BADGE_COLOR_);
 			chrome.browserAction.setBadgeText({text:this.revisionModel_.version.toString()});
+			this.icon_.displayUpToDate = false;
 		} else {
 			chrome.browserAction.setBadgeText({text:''});
+			this.icon_.displayUpToDate = true;
 		}
 	}
 }

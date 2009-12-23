@@ -18,11 +18,13 @@ goog.require('goog.dom');
 
 mbrio.Icon = function() {
 	this.iconNormalImage_ = goog.dom.$("icon");
+	this.iconUpToDateImage_ = goog.dom.$("icon-uptodate");
 	this.iconErrorImage_ = goog.dom.$("icon-error");
 	this.iconImage_ = this.iconNormalImage_;
 	this.canvas_ = goog.dom.$("canvas");
 	this.canvasContext_ = this.canvas_.getContext('2d');
 	this.displayError_ = false;
+	this.displayUpToDate_ = false;
 	
 	this.rotation = 0;
 }
@@ -43,14 +45,32 @@ mbrio.Icon.prototype.__defineGetter__("displayError", function() {
 mbrio.Icon.prototype.__defineSetter__("displayError", function(val) {
 	this.displayError_ = val;
 	
-	if (this.displayError_) {
-		this.iconImage_ = this.iconErrorImage_;
-	} else {
-		this.iconImage_ = this.iconNormalImage_;
-	}
+	this.updateIcon();
 	
 	this.draw();
 });
+
+mbrio.Icon.prototype.__defineGetter__("displayUpToDate", function() {
+	return this.displayUpToDate_;
+});
+
+mbrio.Icon.prototype.__defineSetter__("displayUpToDate", function(val) {
+	this.displayUpToDate_ = val;
+
+	this.updateIcon();
+
+	this.draw();
+});
+
+mbrio.Icon.prototype.updateIcon = function() {
+	if (this.displayError_) {
+		this.iconImage_ = this.iconErrorImage_;
+	} else if (this.displayUpToDate_) {
+		this.iconImage_ = this.iconUpToDateImage_;
+	} else {
+		this.iconImage_ = this.iconNormalImage_;
+	}
+}
 
 mbrio.Icon.prototype.draw = function() {
 	var ic = this;

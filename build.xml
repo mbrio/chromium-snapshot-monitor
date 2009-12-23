@@ -18,7 +18,14 @@
 	<property name="jsdoc.runjs" value="${jsdoc.dir}/app/run.js" />
 	<property name="jsdoc.templates" value="${jsdoc.dir}/templates/jsdoc" />
 	<property name="output.file" value="${output.dir}/application.js" />
+	<property name="zip.file" value="${basedir}/chromium-snapshot-monitor.zip" />
 
+	<target name="zip" description="generates the zip file for uploading to Google" depends="js">
+		<zip destfile="${zip.file}">
+			<fileset dir="${output.dir}" />
+		</zip>
+	</target>
+	
 	<target name="js.templates" description="generates the javascript templates from soy files.">
 		<apply executable="java" parallel="false" verbose="true" dest="${templates.dir}">
 			<fileset dir="${templates.dir}" includes="**/*.soy"/>
@@ -58,8 +65,12 @@
 	
 	<target name="js" description="compile all closure related code" depends="js.templates,js.closure.compile,assets.copy,clean.js.templates" />
 
-	<target name="clean" description="cleans closure files" depends="clean.js.templates,clean.docs">
+	<target name="clean" description="cleans closure files" depends="clean.js.templates,clean.docs,clean.zip">
 		<delete dir="${output.dir}" />
+	</target>
+
+	<target name="clean.zip" description="cleans closure files">
+		<delete file="${zip.file}" />
 	</target>
 	
 	<target name="clean.docs" description="cleans closure files" depends="clean.js.templates">

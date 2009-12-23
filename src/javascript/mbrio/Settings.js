@@ -16,6 +16,8 @@ goog.provide('mbrio.Settings');
 goog.provide('mbrio.SettingsManager');
 goog.provide('mbrio.Repositories');
 
+goog.require('goog.userAgent');
+
 var FILE_NAMES_ = [];
 FILE_NAMES_["arm"] = "chrome-linux.zip";
 FILE_NAMES_["linux-64"] = "chrome-linux.zip";
@@ -95,7 +97,13 @@ mbrio.SettingsManager.prototype.__defineSetter__("useInstaller", function(val) {
 });
 
 mbrio.SettingsManager.prototype.__defineGetter__("platform", function() {
-	return localStorage.platform || 'mac';
+	return localStorage.platform || this.defaultPlatform;
+});
+
+mbrio.SettingsManager.prototype.__defineGetter__("defaultPlatform", function() {
+	if (goog.userAgent.LINUX) return 'linux';
+	else if (goog.userAgent.MAC) return 'mac';
+	else return 'xp';
 });
 
 mbrio.SettingsManager.prototype.__defineSetter__("platform", function(val) {

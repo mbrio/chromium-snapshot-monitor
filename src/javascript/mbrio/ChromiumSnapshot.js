@@ -66,31 +66,11 @@ mbrio.ChromiumSnapshot.prototype.__defineGetter__("downloadLink", function() {
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLogMessage", function() {
-	var messages = this.revisionModel_.changeLog.getElementsByTagName("msg");
-	var message = "";
-	
-	if (messages && messages.length > 0) {
-		var messageNode = messages.item(messages.length - 1);
-		
-		if (messageNode && messageNode.firstChild) {
-			message = messageNode.firstChild.nodeValue;
-		}
-	}
-	
-	return message;
+	return this.queryChangeLog("/log/child::logentry[position()=last()]/child::msg/text()", "");
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLogRevision", function() {
-	var logEntries = this.revisionModel_.changeLog.getElementsByTagName("logentry");
-	var revision = "-1";
-	
-	if (logEntries && logEntries.length > 0) {
-		var logEntry = logEntries.item(logEntries.length - 1);
-		var revisionNode = logEntry.attributes.getNamedItem("revision");
-		if (revisionNode) revision = revisionNode.nodeValue;
-	}
-	
-	return revision;
+	return this.queryChangeLog("/log/child::logentry[position()=last()]/attribute::revision", "-1");
 });
 
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("version", function() {
@@ -100,6 +80,17 @@ mbrio.ChromiumSnapshot.prototype.__defineGetter__("version", function() {
 mbrio.ChromiumSnapshot.prototype.__defineGetter__("changeLog", function() {
 	return this.revisionModel_.changeLog;
 });
+
+mbrio.ChromiumSnapshot.prototype.queryChangeLog = function(query, defaultVal) {
+	var xpath = new XPathEvaluator();
+	var result = xpath.evaluate(query, this.revisionModel_.changeLog, null, XPathResult.STRING_TYPE, null);
+	var val = defaultVal;
+
+	if(result.stringValue != null && result.stringValue.length > 0)
+		val = result.stringValue;
+	
+	return val;
+}
 
 mbrio.ChromiumSnapshot.prototype.initIcon = function() {	
 	this.icon_ = new mbrio.Icon();
@@ -161,6 +152,7 @@ mbrio.ChromiumSnapshot.prototype.retrieveChangeLog = function() {
 				cs.status = mbrio.ChromiumSnapshotStatus.error;
 			} else {
 				cs.revisionModel_.changeLog = xhr.responseXML;
+				
 				cs.status = mbrio.ChromiumSnapshotStatus.loaded;
 			}	
 
